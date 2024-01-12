@@ -1,5 +1,4 @@
 const board = document.getElementById('board');
-const resultMessage = document.getElementById('result');
 const turnMessage = document.getElementById('turn');
 let currentPlayer = 'X';
 let gridSize = 30;
@@ -21,10 +20,10 @@ function handleCellClick(event) {
         gameBoard[index] = currentPlayer;
         event.target.textContent = currentPlayer;
         if (checkWinner()) {
-            resultMessage.textContent = `Player ${currentPlayer} wins!`;
+            turnMessage.textContent = `Player ${currentPlayer} wins!`;
             gameActive = false;
         } else if (gameBoard.every(cell => cell !== '')) {
-            resultMessage.textContent = "It's a tie!";
+            turnMessage.textContent = "It's a tie!";
             gameActive = false;
         } else {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
@@ -44,18 +43,21 @@ function checkWinner() {
 function getWinPatterns() {
     const winPatterns = [];
 
+    // Rows
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j <= gridSize - winningLength; j++) {
             winPatterns.push(Array.from({ length: winningLength }, (_, k) => i * gridSize + j + k));
         }
     }
 
+    // Columns
     for (let i = 0; i <= gridSize - winningLength; i++) {
         for (let j = 0; j < gridSize; j++) {
             winPatterns.push(Array.from({ length: winningLength }, (_, k) => (i + k) * gridSize + j));
         }
     }
 
+    // Diagonals
     for (let i = 0; i <= gridSize - winningLength; i++) {
         for (let j = 0; j <= gridSize - winningLength; j++) {
             winPatterns.push(Array.from({ length: winningLength }, (_, k) => (i + k) * gridSize + j + k));

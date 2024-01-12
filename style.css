@@ -67,3 +67,10 @@ body {
     gap: 15px;
     padding-top: 4px;
 }
+
+#tictactoe-header {
+    margin-right: 50%;
+    transform: translateX(50%);
+    font-size: 30px;
+    margin-bottom: -5px
+}
