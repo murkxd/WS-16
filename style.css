@@ -51,3 +51,23 @@ body {
     justify-content: center;
     cursor: pointer;
 }
+
+.color-button-visible {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    cursor: pointer;
+}  
+
+#new-game-button {
+    background-color: rgb(40, 40, 40)
+}
+
+#difficulty-div {
+    font-size: 20px;
+    gap: 15px;
+}
+
+#difficulty-div {
+    padding-top: 4px;
+}
