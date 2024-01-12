@@ -2,49 +2,70 @@ const board = document.getElementById('board');
 const resultMessage = document.getElementById('result');
 const turnMessage = document.getElementById('turn');
 let currentPlayer = 'X';
-let gameBoard = ['', '', '', '', '', '', '', '', ''];
+let gridSize = 30;
+let winningLength = 5;
+let gameBoard = Array(gridSize * gridSize).fill('');
 let gameActive = true;
 
 function createCell(index) {
-  const cell = document.createElement('div');
-  cell.classList.add('cell');
-  cell.dataset.index = index;
-  cell.addEventListener('click', handleCellClick);
-  board.appendChild(cell);
+    const cell = document.createElement('div');
+    cell.classList.add('cell');
+    cell.dataset.index = index;
+    cell.addEventListener('click', handleCellClick);
+    board.appendChild(cell);
 }
 
 function handleCellClick(event) {
-  const index = event.target.dataset.index;
-  if (gameBoard[index] === '' && gameActive) {
-    gameBoard[index] = currentPlayer;
-    event.target.textContent = currentPlayer;
-    if (checkWinner()) {
-      resultMessage.textContent = `Player ${currentPlayer} wins!`;
-      gameActive = false;
-    } else if (gameBoard.every(cell => cell !== '')) {
-      resultMessage.textContent = "It's a tie!";
-      gameActive = false;
-    } else {
-      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-      turnMessage.textContent = `Player ${currentPlayer}'s turn`;
+    const index = event.target.dataset.index;
+    if (gameBoard[index] === '' && gameActive) {
+        gameBoard[index] = currentPlayer;
+        event.target.textContent = currentPlayer;
+        if (checkWinner()) {
+            resultMessage.textContent = `Player ${currentPlayer} wins!`;
+            gameActive = false;
+        } else if (gameBoard.every(cell => cell !== '')) {
+            resultMessage.textContent = "It's a tie!";
+            gameActive = false;
+        } else {
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            turnMessage.textContent = `Player ${currentPlayer}'s turn`;
+        }
     }
-  }
 }
 
 function checkWinner() {
-  const winPatterns = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8],
-    [0, 3, 6], [1, 4, 7], [2, 5, 8],
-    [0, 4, 8], [2, 4, 6]
-  ];
+    const winPatterns = getWinPatterns();
 
-  return winPatterns.some(pattern =>
-    gameBoard[pattern[0]] !== '' &&
-    gameBoard[pattern[0]] === gameBoard[pattern[1]] &&
-    gameBoard[pattern[1]] === gameBoard[pattern[2]]
-  );
+    return winPatterns.some(pattern =>
+        pattern.every(index => gameBoard[index] !== '' && gameBoard[index] === currentPlayer)
+    );
 }
 
-for (let i = 0; i < 9; i++) {
-  createCell(i);
+function getWinPatterns() {
+    const winPatterns = [];
+
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j <= gridSize - winningLength; j++) {
+            winPatterns.push(Array.from({ length: winningLength }, (_, k) => i * gridSize + j + k));
+        }
+    }
+
+    for (let i = 0; i <= gridSize - winningLength; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            winPatterns.push(Array.from({ length: winningLength }, (_, k) => (i + k) * gridSize + j));
+        }
+    }
+
+    for (let i = 0; i <= gridSize - winningLength; i++) {
+        for (let j = 0; j <= gridSize - winningLength; j++) {
+            winPatterns.push(Array.from({ length: winningLength }, (_, k) => (i + k) * gridSize + j + k));
+            winPatterns.push(Array.from({ length: winningLength }, (_, k) => (i + k) * gridSize + j + winningLength - k - 1));
+        }
+    }
+
+    return winPatterns;
+}
+
+for (let i = 0; i < gridSize * gridSize; i++) {
+    createCell(i);
 }
