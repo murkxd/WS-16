@@ -36,14 +36,14 @@ body {
 #board {
     display: grid;
     grid-template-columns: repeat(30, 1fr);
-    grid-gap: 5px;
+    grid-gap: 2px;
     margin: 20px auto;
     width: fit-content;
 }
 .cell {
     width: 30px;
     height: 30px;
-    border: 1px solid white;
+    border: 0.5px solid white;
     font-size: 1em;
     display: flex;
     align-items: center;

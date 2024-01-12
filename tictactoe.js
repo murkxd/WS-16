@@ -1,5 +1,6 @@
 const board = document.getElementById('board');
 const turnMessage = document.getElementById('turn');
+const newGameButton = document.getElementById('new-game-button');
 let currentPlayer = 'X';
 let gridSize = 30;
 let winningLength = 5;
@@ -43,21 +44,18 @@ function checkWinner() {
 function getWinPatterns() {
     const winPatterns = [];
 
-    // Rows
     for (let i = 0; i < gridSize; i++) {
         for (let j = 0; j <= gridSize - winningLength; j++) {
             winPatterns.push(Array.from({ length: winningLength }, (_, k) => i * gridSize + j + k));
         }
     }
 
-    // Columns
     for (let i = 0; i <= gridSize - winningLength; i++) {
         for (let j = 0; j < gridSize; j++) {
             winPatterns.push(Array.from({ length: winningLength }, (_, k) => (i + k) * gridSize + j));
         }
     }
 
-    // Diagonals
     for (let i = 0; i <= gridSize - winningLength; i++) {
         for (let j = 0; j <= gridSize - winningLength; j++) {
             winPatterns.push(Array.from({ length: winningLength }, (_, k) => (i + k) * gridSize + j + k));
@@ -66,6 +64,19 @@ function getWinPatterns() {
     }
 
     return winPatterns;
+}
+
+function resetGame() {
+    board.innerHTML = '';
+    currentPlayer = 'X';
+    gameBoard = Array(gridSize * gridSize).fill('');
+    gameActive = true;
+
+    turnMessage.textContent = `Player X's turn`;
+
+    for (let i = 0; i < gridSize * gridSize; i++) {
+        createCell(i);
+    }
 }
 
 for (let i = 0; i < gridSize * gridSize; i++) {
